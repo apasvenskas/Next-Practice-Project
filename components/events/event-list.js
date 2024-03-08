@@ -1,10 +1,16 @@
+import { getAllEvents } from "@/dummy-data";
 import EventItem from "./event-item";
 import classes from '@/styles/event-list.module.css'
 
 function EventList(props){
-    const { items } = props;
+    // const { items } = props;
+    const eventsArray = getAllEvents();
+    // console.log(items);
+    // console.log(Array.isArray(items));// This should return true
+    // console.log(typeof items) 
+
     return <ul className={classes.list}>
-        {items.map((event) => (
+        {eventsArray.map((event) => (
             <EventItem 
             key={event.id}
             id={event.id}

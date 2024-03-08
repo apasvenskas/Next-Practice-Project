@@ -5,6 +5,7 @@ function AddressIcon() {
       fill='none'
       viewBox='0 0 24 24'
       stroke='currentColor'
+      style={{ width: "20px", height: "20px" }}
     >
       <path
         strokeLinecap='round'
