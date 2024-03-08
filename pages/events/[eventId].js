@@ -1,6 +1,7 @@
 import EventContent from "@/components/events/event-detail/event-content";
 import EventLogistics from "@/components/events/event-detail/event-logistics";
 import EventSummary from "@/components/events/event-detail/event-summary";
+import ErrorAlert from "@/components/ui/error-alert/error-alert";
 import { getEventById } from "@/dummy-data";
 import { useRouter } from "next/router";
 import { Fragment } from "react";
@@ -11,7 +12,13 @@ function EventDetailPage(){
     const event = getEventById(eventId);
 
     if(!event){
-        return <p>No event found!</p>
+        return(
+            <Fragment>
+                <ErrorAlert>
+                <p>No event found!</p>
+                </ErrorAlert>
+            </Fragment>
+        ) 
     }
 
     return (
