@@ -19,7 +19,8 @@ export async function getStaticProps(){
   return {
     props: {
       events: featuredEvents
-    }
+    },
+    revalidate:  1800 //revalidate the page for an update dont need to redeploy with this. 
   }
 }
 
