@@ -1,3 +1,4 @@
+
 export async function getAllEvents(){
    const response = await fetch('https://nextjs-fetchingprerendering-default-rtdb.firebaseio.com/events.json');
    const data = await response.json();
@@ -15,5 +16,10 @@ export async function getAllEvents(){
 // the getAllEvents get called in the following function to get Featured events
 export async function getFeaturedEvents() {
     const allEvents = await getAllEvents();
-    return DUMMY_EVENTS.filter((event) => event.isFeatured);
+    return allEvents.filter((event) => event.isFeatured);
+  }
+
+  export async function getEventById(id) {
+    const allEvents = await getAllEvents();
+    return allEvents.find((event) => event.id === id);
   }
