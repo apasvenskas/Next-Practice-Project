@@ -59,3 +59,8 @@ export async function getStaticPaths() {
 }
 
 export default EventDetailPage;
+
+{/* <Head>
+  <title>Filtered Events</title>
+  <meata name="description" content={`All events for ${numMonth}/${numYear}`} />
+</Head>; */}
