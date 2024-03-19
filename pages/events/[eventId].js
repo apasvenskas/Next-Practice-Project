@@ -1,15 +1,13 @@
-import EventContent from "@/components/events/event-detail/event-content";
-import EventLogistics from "@/components/events/event-detail/event-logistics";
-import EventSummary from "@/components/events/event-detail/event-summary";
-import ErrorAlert from "@/components/ui/error-alert/error-alert";
-// import { getEventById } from "@/dummy-data";
-import { getEventById, getAllEvents } from "../../helpers/api-util";
-// import { useRouter } from "next/router";
-import { Fragment } from "react";
+import { Fragment } from 'react';
+import Head from 'next/head';
+
+import { getEventById, getFeaturedEvents } from '@/helpers/api-util';
+import EventSummary from '@/components/events/event-detail/event-summary'
+import EventLogistics from '@/components/events/event-detail/event-logistics';
+import EventContent from '@/components/events/event-detail/event-content';
+import ErrorAlert from '@/components/ui/error-alert/error-alert';
 
 function EventDetailPage(props) {
-  // const router = useRouter();
-  // const eventId = router.query.eventId;
   const event = props.selectedEvent;
 
   if (!event) {
@@ -21,46 +19,52 @@ function EventDetailPage(props) {
   }
 
   return (
-    <div>
-      <Fragment>
-        <EventSummary title={event.title} />
-        <EventLogistics
-          date={event.date}
-          adress={event.location}
-          image={event.image}
-          imageAlt={event.title}
+    <Fragment>
+      <Head>
+        <title>{event.title}</title>
+        <meta
+          name='description'
+          content={event.description}
         />
-        <EventContent>
-          <p>{event.description}</p>
-        </EventContent>
-      </Fragment>
-    </div>
+      </Head>
+      <EventSummary title={event.title} />
+      <EventLogistics
+        date={event.date}
+        address={event.location}
+        image={event.image}
+        imageAlt={event.title}
+      />
+      <EventContent>
+        <p>{event.description}</p>
+      </EventContent>
+    </Fragment>
   );
 }
-// aditional functions for getting data from firebase db
+
 export async function getStaticProps(context) {
   const eventId = context.params.eventId;
+
   const event = await getEventById(eventId);
+
   return {
     props: {
-      selectedEvent: event,
+      selectedEvent: event
     },
-    revalidate: 30, // for reloading a page with updated data dont need to redeploy
+    revalidate: 30
   };
 }
 
 export async function getStaticPaths() {
-  const events = await getAllEvents();
-  const paths = events.map((event) => ({ params: { eventId: event.id } })); // getting all the events
+  const events = await getFeaturedEvents();
+
+  const paths = events.map(event => ({ params: { eventId: event.id } }));
+
   return {
     paths: paths,
-    fallback: true,
+    fallback: 'blocking'
   };
 }
 
 export default EventDetailPage;
 
-{/* <Head>
-  <title>Filtered Events</title>
-  <meata name="description" content={`All events for ${numMonth}/${numYear}`} />
-</Head>; */}
+

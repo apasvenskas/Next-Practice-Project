@@ -1,29 +1,32 @@
-import Head  from "next/head";
-import EventList from "@/components/events/event-list";
-import { getFeaturedEvents } from "@/dummy-data";
+import Head from 'next/head';
+
+import { getFeaturedEvents } from '../helpers/api-util';
+import EventList from '@/components/events/event-list';
 
 function HomePage(props) {
-
-  return(
+  return (
     <div>
       <Head>
         <title>NextJS Events</title>
-        <meata name="description" content="Find events that will improve you"/>
+        <meta
+          name='description'
+          content='Find a lot of great events that allow you to evolve...'
+        />
       </Head>
       <EventList items={props.events} />
     </div>
-  )
+  );
 }
 
-export async function getStaticProps(){
+export async function getStaticProps() {
   const featuredEvents = await getFeaturedEvents();
 
   return {
     props: {
-      events: featuredEvents
+      events: featuredEvents,
     },
-    revalidate:  1800 //revalidate the page for an update dont need to redeploy with this. 
-  }
+    revalidate: 1800, // revalidate after 1800 seconds .5 of an hour
+  };
 }
 
 export default HomePage;
