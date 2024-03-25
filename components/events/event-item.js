@@ -1,4 +1,4 @@
-import Link from "next/link";
+
 import classes from '@/styles/event-item.module.css'
 import Button from "../ui/button";
 import DateIcon from "../icons/date-icon";
