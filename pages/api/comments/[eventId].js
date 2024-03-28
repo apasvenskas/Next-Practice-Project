@@ -1,3 +1,5 @@
+import CommentList from "@/components/input/comment-list";
+
 // comment section
 function handler(req, res){
     const eventId = req.query; 
@@ -10,7 +12,7 @@ function handler(req, res){
             !text ||
             text.trim() === ''
         ) {
-            res.status(422).jason({ message: 'Invalid input.' }); 
+            res.status(422).json({ message: 'Invalid input.' }); 
             return; 
         }
         
