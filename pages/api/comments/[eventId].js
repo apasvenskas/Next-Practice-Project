@@ -1,8 +1,12 @@
-import CommentList from "@/components/input/comment-list";
+import { MongoClient } from "mongodb";
 
 // comment section
-function handler(req, res){
+async function handler(req, res){
     const eventId = req.query; 
+
+    const client = await MongoClient.connect
+    ('mongodb+srv://audrius13toto:Kaskos1234@nextjs.vdn1m1j.mongodb.net/newsletter?retryWrites=true&w=majority&appName=NextJS');
+
     if(req.method === 'POST'){
         const { email, name, text } = req.body
         if(
@@ -17,12 +21,19 @@ function handler(req, res){
         }
         
         const newComment = {
-            id: new Date().toISOString(), 
             email,
             name,
-            text
+            text,
+            eventId
         }
-        console.log(newComment)
+
+        const db = client.db()
+        const result = await db.collection('comments').insertOne(newComment);
+
+        console.log(result)
+
+        newComment.id = result.insertedId;
+
         res.status(201).json({ message: 'Added comment.', comment: newComment })
     }
     if(req.method === 'GET'){
@@ -31,6 +42,7 @@ function handler(req, res){
         ];
         res.status(200).json({ comments: dummyList });
     }
+    client.close();
 }
 
 export default handler; 
