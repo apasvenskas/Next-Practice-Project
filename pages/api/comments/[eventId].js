@@ -1,52 +1,62 @@
-import { MongoClient } from "mongodb";
+import { connect, insert, getAllDocuments } from "@/helpers/db-util";
 
 // comment section
-async function handler(req, res){
-    const eventId = req.query; 
+async function handler(req, res) {
+  const eventId = req.query.eventId;
 
-    const client = await MongoClient.connect
-    ('mongodb+srv://audrius13toto:Kaskos1234@nextjs.vdn1m1j.mongodb.net/newsletter?retryWrites=true&w=majority&appName=NextJS');
+  let client;
+  try {
+    client = await connect();
+  } catch (error) {
+    res.status(500).json({ message: "Connecting to the database failed!" });
+    return;
+  }
 
-    if(req.method === 'POST'){
-        const { email, name, text } = req.body
-        if(
-            !email.includes('@') ||
-            !name ||
-            name.trim() === '' ||
-            !text ||
-            text.trim() === ''
-        ) {
-            res.status(422).json({ message: 'Invalid input.' }); 
-            return; 
-        }
-        
-        const newComment = {
-            email,
-            name,
-            text,
-            eventId
-        }
-
-        const db = client.db()
-        const result = await db.collection('comments').insertOne(newComment);
-
-        console.log(result)
-
-        newComment.id = result.insertedId;
-
-        res.status(201).json({ message: 'Added comment.', comment: newComment })
+  if (req.method === "POST") {
+    const { email, name, text } = req.body;
+    if (
+      !email.includes("@") ||
+      !name ||
+      name.trim() === "" ||
+      !text ||
+      text.trim() === ""
+    ) {
+      res.status(422).json({ message: "Invalid input." });
+      return;
     }
-    if(req.method === 'GET'){
-        const db = client.db();
-        const documents = await db
-        .collection('comments')
-        .find()
-        .sort({ _id: -1 })
-        .toArray();
 
-        res.status(200).json({ comments: documents })
+    const newComment = {
+      email,
+      name,
+      text,
+      eventId,
+    };
+
+    // const db = client.db()
+    // const result = await db.collection('comments').insertOne(newComment);
+
+    // console.log(result)
+
+    let result;
+
+    try {
+      result = await insert(client, "comments", newComment);
+      newComment.id = result.insertedId;
+      res.status(201).json({ message: "Added comment.", comment: newComment });
+    } catch (error) {
+      req.status(500).json({ message: "Inserting comment failed!" });
     }
-    client.close();
+
+  }
+  if (req.method === "GET") {
+    try {
+      const documents = await getAllDocuments(client, "comment", { _id: -1 }); // going to sort by id in decending order
+      res.status(200).json({ comments: documents });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get the documents" });
+    }
+  }
+  client.close();
 }
 
-export default handler; 
+export default handler;
