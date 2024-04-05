@@ -18,7 +18,6 @@ function MyApp({ Component, pageProps }) {
           <meta name="description" content="Next.js Events" />
         </Head>
         <Component {...pageProps} />
-        
       </Layout>
     </NotificationContextProvider>
   );
