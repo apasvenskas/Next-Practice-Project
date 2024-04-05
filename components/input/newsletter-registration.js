@@ -38,7 +38,7 @@ function NewsletterRegistration() {
     })
     .then((data) => {
       notificationCtx.showNotification({
-        title: 'Succes!',
+        title: 'Success!',
         message: 'Succesfully registered for newsletter!',
         status: 'success'
       }); 

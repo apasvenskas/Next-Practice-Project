@@ -3,9 +3,10 @@ import classes from './comment-list.module.css';
 function CommentList(props) {
   const { items } = props;
 
+  // Check if 'items' is an array and has elements before mapping
   return (
     <ul className={classes.comments}>
-      {items.map((item) => (
+      {Array.isArray(items) && items.map((item) => (
         <li key={item._id}>
           <p>{item.text}</p>
           <div>
